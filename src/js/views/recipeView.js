@@ -7,7 +7,7 @@ class RecipeView{
         this.#data=data;
         const markup=this.#generateMarkup();
         this.#clear();
-        this.#parentElement.insertAdjacentElement('afterbegin',markup);
+        this.#parentElement.insertAdjacentHTML('afterbegin',markup);
     }
     renderSpinner(){
         const markup=` 
@@ -16,10 +16,26 @@ class RecipeView{
           <use href="${icons}#icon-loader"></use>
         </svg>
       </div>
-        `
-        this.#clear();
-        this.#parentElement.insertAdjacentElement('afterbegin',markup);
-
+      `
+       this.#clear();
+        this.#parentElement.insertAdjacentHTML('afterbegin',markup);
+    }
+    errorHandler(errorMessage){
+      const markup=`
+    <div class="error">
+      <div>
+        <svg>
+          <use href="${icons}#icon-alert-triangle"></use>
+        </svg>
+      </div>
+      <p>${errorMessage}</p>
+    </div>
+      `
+      this.#clear();
+      this.#parentElement.insertAdjacentHTML('afterbegin',markup);
+    }
+    addLoadHandler(handler){
+      ['hashchange','load'].forEach(event=>window.addEventListener(event,handler));
     }
     #clear(){
         this.#parentElement.innerHTML='';
@@ -113,8 +129,6 @@ class RecipeView{
  </a>
 </div>
 `;
-parentElement.innerHTML='';
-parentElement.insertAdjacentHTML('afterbegin',markup);
     }
 }
 export default new RecipeView()
