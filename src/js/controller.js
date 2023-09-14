@@ -22,6 +22,10 @@ const controlRecipes= async ()=>{
     recipeView.errorHandler()
   }
 } 
+const controlServing=(newserving)=>{
+  model.updateServing(newserving);
+  recipeView.render(model.state.recipe)
+}
 const controlSerachResult=async ()=>{
   try {
     // getting query string from the search input
@@ -32,7 +36,6 @@ const controlSerachResult=async ()=>{
     // fetch data from the server based on the query
        await model.fetchSearchResult(query);
        const searchresults=model.state.search.results;
-       console.log(searchresults);
        if(!searchresults) return;
     // display the search result
        resultview.render(model.searchResultPage());
@@ -47,12 +50,10 @@ const controlPagination=(page)=>{
   resultview.render(model.searchResultPage(page));
   paginationview.render(model.state.search)
 }
-// controlSerachResult();
 const init= function(){
  recipeView.addLoadHandler(controlRecipes);
+ recipeView.addServingHandler(controlServing);
  searchView.searchEventListener(controlSerachResult);
  paginationview.addPageHandler(controlPagination);
 }
 init();
-// window.addEventListener('hashchange',controlRecipes)
-// window.addEventListener('load',controlRecipes)

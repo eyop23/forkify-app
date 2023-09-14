@@ -56,3 +56,10 @@ export const fetchrecipe= async (id)=>{
       return state.search.results.slice(start,end);
     
   }
+  export const updateServing = (newServings)=>{
+    state.recipe.ingredients.forEach(ing=>{
+      // doubling the serving also double the quantity
+      ing.quantity=(ing.quantity * newServings)/ state.recipe.servings;
+      state.recipe.servings = newServings;
+    })
+  }
