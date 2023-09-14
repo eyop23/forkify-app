@@ -2,10 +2,10 @@ import view from './view.js';
 import icons from 'url:../../img/icons.svg'
 class resultView extends view{
     _parentElement=document.querySelector('.results');
+    _defaultErrorMessage="no search result found";
     _generateMarkup(){
         return `
-        ${this._data.map((result,index)=>{
-          if(index < 10){
+        ${this._data.map((result)=>{
            return `
           <li class="preview">
             <a class="preview__link preview__link--active" href="#${result.id}">
@@ -23,8 +23,8 @@ class resultView extends view{
               </div>
             </a>
           </li>
-          `
-         } })}    `
+          `}
+          )}`
        }
 }
 export default new resultView();
