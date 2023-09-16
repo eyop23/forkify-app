@@ -15,7 +15,6 @@ export const fetchrecipe= async (id)=>{
     try {
       const data=await getJSON(`${API_URL}${id}`);
       const {recipe}=data.data;
-      console.log(recipe)
       state.recipe={
         id:recipe.id,
         title:recipe.title,
@@ -26,10 +25,7 @@ export const fetchrecipe= async (id)=>{
         cookingTime:recipe.cooking_time,
         ingredients:recipe.ingredients
       }
-      console.log(state.recipe)
     } catch (error) {
-    //   alert(error);
-    console.log(error)
     throw error;
     }
   }

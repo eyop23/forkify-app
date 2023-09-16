@@ -12,18 +12,23 @@ const controlRecipes= async ()=>{
     // console.log(id)
     if(!id) return;
     recipeView.renderSpinner();
+    // fetching recipe data 
     await model.fetchrecipe(id)
     const {recipe}=model.state;
     if(!recipe) return;
-    recipeView.render(recipe)
+    // display the recipe
+    recipeView.render(recipe);
+    // display the searchresult with active class of preview, when we click to one of the search result
+    resultview.render(model.searchResultPage());
    
   } catch (error) {
-    console.log(error)
     recipeView.errorHandler()
   }
 } 
 const controlServing=(newserving)=>{
+  // updating serving and ingriedent quantity
   model.updateServing(newserving);
+  // display the  recipe with the new serving n qunatity
   recipeView.render(model.state.recipe)
 }
 const controlSerachResult=async ()=>{
@@ -37,12 +42,11 @@ const controlSerachResult=async ()=>{
        await model.fetchSearchResult(query);
        const searchresults=model.state.search.results;
        if(!searchresults) return;
-    // display the search result
+    // display the search result with pagination effect
        resultview.render(model.searchResultPage());
     // display the pagination
        paginationview.render(model.state.search)
   } catch (error) {
-    console.log(error)
    resultview.errorHandler() 
   }
 }

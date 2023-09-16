@@ -29,16 +29,14 @@ class RecipeView extends view{
    <svg class="recipe__info-icon">
      <use href="src/img/icons.svg#icon-clock"></use>
    </svg>
-   <span class="recipe__info-data recipe__info-data--minutes">${this.
-    _data.cookingTime}</span>
+   <span class="recipe__info-data recipe__info-data--minutes">${this._data.cookingTime}</span>
    <span class="recipe__info-text">minutes</span>
  </div>
  <div class="recipe__info">
    <svg class="recipe__info-icon">
      <use href="${icons}#icon-users"></use>
    </svg>
-   <span class="recipe__info-data recipe__info-data--people">${this.
-    _data.servings}</span>
+   <span class="recipe__info-data recipe__info-data--people">${this._data.servings}</span>
    <span class="recipe__info-text">servings</span>
 
    <div class="recipe__info-buttons">
@@ -110,7 +108,3 @@ class RecipeView extends view{
 }
 export default new RecipeView()
 
-// export const recipeviewobject=new recipeView();
-
-// // const renderRecipe=function(recipeData,parentElement){
-    

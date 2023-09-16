@@ -2,6 +2,7 @@ import View from "./view";
 import icons from 'url:../../img/icons.svg'
 class PaginationView extends View{
     _parentElement=document.querySelector('.pagination');
+    _currentPage;
     addPageHandler(handler){
      this._parentElement.addEventListener('click',function(e){
         const btn=e.target.closest('.btn--inline');
@@ -10,34 +11,34 @@ class PaginationView extends View{
         handler(gotoPage);
      })
     }
-    previousBtn(){
-      return `<button data-goto="${currentPage - 1 }" class="btn--inline pagination__btn--prev">
+    _previousBtn(){
+      return `<button data-goto="${this._currentPage - 1 }" class="btn--inline pagination__btn--prev">
       <svg class="search__icon">
         <use href="${icons}#icon-arrow-left"></use>
       </svg>
-      <span>page ${currentPage - 1}</span>
+      <span>page ${this._currentPage - 1}</span>
       </button>`
     }
-    nextBtn(){
-      return `<button data-goto="${currentPage + 1}" class="btn--inline pagination__btn--next">
-        <span>page ${currentPage + 1}</span>
+    _nextBtn(){
+      return `<button data-goto="${this._currentPage + 1}" class="btn--inline pagination__btn--next">
+        <span>page ${this._currentPage + 1}</span>
         <svg class="search__icon">
           <use href="${icons}#icon-arrow-right"></use>
         </svg>
         </button>`
     }
     _generateMarkup(){
-        const currentPage=this._data.page;
+         this._currentPage=this._data.page;
         const numPage=Math.ceil(this._data.results.length / this._data.resultperpage);
-        if( numPage > 1 && currentPage === 1){
-          this.nextBtn();
+        if( numPage > 1 && this._currentPage === 1){
+          this._nextBtn();
         }
-        if( numPage > 1 && currentPage === numPage  ){
-         this.previousBtn();  
+        if( numPage > 1 && this._currentPage === numPage  ){
+         this._previousBtn();  
         }
-        if(currentPage < numPage){
-            this.nextBtn();
-            this.previousBtn();
+        if(this._currentPage < numPage){
+            this._nextBtn();
+            this._previousBtn();
         }
         return ``
     }
