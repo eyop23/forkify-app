@@ -4,6 +4,7 @@ import searchView from './views/searchView.js'
 import resultview from './views/searchResultView.js'
 import paginationview from './views/paginationView.js'
 import bookmarkview from './views/bookmarkView.js'
+import addRecipeView from './views/addRecipeView.js'
 import "core-js/stable";
 import "regenerator-runtime/runtime"
 const controlRecipes= async ()=>{
@@ -69,8 +70,12 @@ const controlAddBookmark=()=>{
 const controlBookmark = () => {
   bookmarkview.render(model.state.bookmark);
 }
+const controlUploadOwnRecipe = (newrecipe) => {
+console.log(newrecipe.value)
+}
 const init= function(){
 bookmarkview.addBookMarkHandler(controlBookmark)
+addRecipeView.uploadRecipeHandler(controlUploadOwnRecipe)
  recipeView.addLoadHandler(controlRecipes);
  recipeView.addServingHandler(controlServing);
  recipeView.addBookMarkHandler(controlAddBookmark)

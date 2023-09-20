@@ -82,6 +82,9 @@ export const fetchrecipe= async (id)=>{
    const storage=localStorage.getItem('bookmarks');
    if(storage) state.bookmark=JSON.parse(storage);
   }
+  // const showAddModal = () => {
+
+  // }
   const init = () => {
     getBookmark();
   }
