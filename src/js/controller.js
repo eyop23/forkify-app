@@ -71,7 +71,9 @@ const controlBookmark = () => {
   bookmarkview.render(model.state.bookmark);
 }
 const controlUploadOwnRecipe = (newrecipe) => {
-console.log(newrecipe.value)
+  console.log(newrecipe)
+ model.addRecipe(newrecipe);
+
 }
 const init= function(){
 bookmarkview.addBookMarkHandler(controlBookmark)

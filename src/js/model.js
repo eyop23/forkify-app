@@ -1,5 +1,5 @@
 import { API_URL,RESULT_PER_PAGE } from './config.js';
-import {getJSON } from './helpers.js';
+import {getJSON,sentJSON } from './helpers.js';
 
 import { async } from "regenerator-runtime";
 
@@ -82,9 +82,24 @@ export const fetchrecipe= async (id)=>{
    const storage=localStorage.getItem('bookmarks');
    if(storage) state.bookmark=JSON.parse(storage);
   }
-  // const showAddModal = () => {
-
-  // }
+  export const addRecipe = async (recipe) => {
+    // const data=await getJSON(`${API_URL}`);
+    const ingredients=Object.entries(recipe).filter(entry=>entry[0].startsWith('ingredient') && entry[1] !== '').map(ing=>{
+     const [quantity,unit,description]= ing[1].replaceAll(' ','').split(',');
+     return {quantity : quantity ? +quantity : null,unit,description}
+    })
+    const newRecipe={
+      title:recipe.title,
+      publisher:recipe.publisher,
+      source_url:recipe.sourceUrl,
+      image_url:recipe.image,
+      servings:+recipe.servings,
+      cooking_time:+recipe.cookingTime,
+      ingredients
+    }
+    console.log(newRecipe);
+    const data=await sentJSON(``)
+  }
   const init = () => {
     getBookmark();
   }

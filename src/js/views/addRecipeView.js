@@ -35,7 +35,9 @@ class addRecipe extends view{
    uploadRecipeHandler(handler){
     this._parentElement.addEventListener('submit',function(e){
       e.preventDefault();
-      const data=new FormData(this);
+      const dataArr=[...new FormData(this)];
+      // convert array to obejct
+      const data=Object.fromEntries(dataArr);
       handler(data)
     })
    }
