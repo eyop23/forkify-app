@@ -1,4 +1,4 @@
-import { API_URL,RESULT_PER_PAGE } from './config.js';
+import { API_URL,KEY,RESULT_PER_PAGE } from './config.js';
 import {getJSON,sentJSON } from './helpers.js';
 
 import { async } from "regenerator-runtime";
@@ -12,20 +12,24 @@ export const state={
    },
    bookmark:[],
 }
+const dataobj=(data)=>{
+  const {recipe}=data.data;
+  return {
+    id:recipe.id,
+    title:recipe.title,
+    publisher:recipe.publisher,
+    sourcelUrl:recipe.source_url,
+    image:recipe.image_url,
+    servings:recipe.servings,
+    cookingTime:recipe.cooking_time,
+    ingredients:recipe.ingredients,
+    ...(recipe.key && {key:recipe.key}),
+  }
+}
 export const fetchrecipe= async (id)=>{
     try {
-      const data=await getJSON(`${API_URL}${id}`);
-      const {recipe}=data.data;
-      state.recipe={
-        id:recipe.id,
-        title:recipe.title,
-        publisher:recipe.publisher,
-        sourcelUrl:recipe.source_url,
-        image:recipe.image_url,
-        servings:recipe.servings,
-        cookingTime:recipe.cooking_time,
-        ingredients:recipe.ingredients
-      }
+      const data=await getJSON(`${API_URL}${id}?key=${KEY}`);
+      state.recipe = dataobj(data);
       if(state.bookmark.some(bookmark=>bookmark.id === id)) state.recipe.bookmarked=true;
       else state.recipe.bookmarked=false;
     } catch (error) {
@@ -34,18 +38,18 @@ export const fetchrecipe= async (id)=>{
   }
   export const fetchSearchResult=async (query)=>{
     try{
-     const data=await getJSON(`${API_URL}?search=${query}`);
+     const data=await getJSON(`${API_URL}?search=${query}&key=${KEY}`);
      state.search.results=data.data.recipes.map(result=>{
       return {
         id:result.id,
         title:result.title,
         publisher:result.publisher,
         image:result.image_url,
+        ...(result.key && {key:result.key}),
       }
      })
      state.search.page=1;
     }catch(error){
-      console.log(error)
       throw error;
     }
   }
@@ -84,9 +88,12 @@ export const fetchrecipe= async (id)=>{
   }
   export const addRecipe = async (recipe) => {
     // const data=await getJSON(`${API_URL}`);
+    try{
     const ingredients=Object.entries(recipe).filter(entry=>entry[0].startsWith('ingredient') && entry[1] !== '').map(ing=>{
-     const [quantity,unit,description]= ing[1].replaceAll(' ','').split(',');
-     return {quantity : quantity ? +quantity : null,unit,description}
+      const ingArray=ing[1].replaceAll(' ','').split(',');
+      const [quantity,unit,description]= ingArray;
+      if(ingArray.length !== 3) throw new Error('wrong ingrident format')
+      return {quantity : quantity ? +quantity : null,unit,description}
     })
     const newRecipe={
       title:recipe.title,
@@ -97,8 +104,14 @@ export const fetchrecipe= async (id)=>{
       cooking_time:+recipe.cookingTime,
       ingredients
     }
-    console.log(newRecipe);
-    const data=await sentJSON(``)
+
+    const data=await sentJSON(`${API_URL}?key=${KEY}`,newRecipe)
+    state.recipe=dataobj(data);
+    addBookMark(state.recipe)
+  }catch(err){
+    // console.log(err)
+    throw err
+  }
   }
   const init = () => {
     getBookmark();

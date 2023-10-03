@@ -11,9 +11,7 @@ class RecipeView extends view{
       this._parentElement.addEventListener('click',function(e){
         const btn=e.target.closest('.btn--update-servings');
         if(!btn) return;
-        console.log(btn)
         const {update}=btn.dataset;
-        console.log(+update)
         if(+update > 0)  handler(+update);
       })
     }
@@ -25,7 +23,7 @@ class RecipeView extends view{
       })
     }
     _generateMarkup(){ 
- return `
+return `
     <figure class="recipe__fig">
       <img src="${this._data.image}" alt="Tomato" class="recipe__img" />
              <h1 class="recipe__title">
@@ -62,7 +60,7 @@ class RecipeView extends view{
    </div>
  </div>
 
- <div class="recipe__user-generated">
+ <div class="recipe__user-generated ${this._data.key ? '' : 'hidden'}">
    <svg>
      <use href="${icons}#icon-user"></use>
    </svg>

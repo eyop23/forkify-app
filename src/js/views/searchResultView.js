@@ -4,6 +4,7 @@ class resultView extends view{
     _parentElement=document.querySelector('.results');
     _defaultErrorMessage="no search result found";
     _generateMarkup(){
+      console.log(this._data)
         return `
         ${this._data.map((result)=>{
           const id=window.location.hash.slice(1);
@@ -16,7 +17,7 @@ class resultView extends view{
               <div class="preview__data">
                 <h4 class="preview__title">${result.title}</h4>
                 <p class="preview__publisher">${result.publisher}</p>
-                <div class="preview__user-generated">
+                <div class="preview__user-generated ${result.key ? '' : 'hidden' }">
                   <svg>
                     <use href="${icons}#icon-user"></use>
                   </svg>

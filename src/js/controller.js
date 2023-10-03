@@ -1,4 +1,5 @@
 import * as model from './model.js'
+import { MODAL_CLOSE } from './config.js'
 import recipeView from './views/recipeView.js'
 import searchView from './views/searchView.js'
 import resultview from './views/searchResultView.js'
@@ -11,18 +12,16 @@ const controlRecipes= async ()=>{
   try {
     // getting id from url 
     const id=window.location.hash.slice(1);
-    // console.log(id)
     if(!id) return;
     recipeView.renderSpinner();
-    // fetching recipe data 
+    // display the searchresult with active class of preview, when we click to one of the search result
+    resultview.render(model.searchResultPage());
+    // fetch recipe
     await model.fetchrecipe(id)
     const {recipe}=model.state;
     if(!recipe) return;
     // display the recipe
-    recipeView.render(recipe);
-    // display the searchresult with active class of preview, when we click to one of the search result
-    resultview.render(model.searchResultPage());
-   
+    recipeView.render(recipe);   
   } catch (error) {
     recipeView.errorHandler()
   }
@@ -53,8 +52,10 @@ const controlSerachResult=async ()=>{
   }
 }
 const controlPagination=(page)=>{
-  resultview.render(model.searchResultPage(page));
-  paginationview.render(model.state.search)
+      // display the search result with pagination effect
+        resultview.render(model.searchResultPage(page));
+            // display the pagination
+        paginationview.render(model.state.search)
 }
 const controlAddBookmark=()=>{
   // adding recipe to bookmark
@@ -70,9 +71,23 @@ const controlAddBookmark=()=>{
 const controlBookmark = () => {
   bookmarkview.render(model.state.bookmark);
 }
-const controlUploadOwnRecipe = (newrecipe) => {
-  console.log(newrecipe)
- model.addRecipe(newrecipe);
+const controlUploadOwnRecipe = async (newrecipe) => {
+try{
+  addRecipeView.renderSpinner();
+ await model.addRecipe(newrecipe);
+ recipeView.render(model.state.recipe);
+ bookmarkview.render(model.state.bookmark);
+ setTimeout(function(){
+addRecipeView.toggleWindow();
+ },MODAL_CLOSE * 1000)
+ window.history.pushState(null,'',`#${model.state.recipe.id}`)
+}
+catch(err){
+addRecipeView.errorHandler(err.message);
+setTimeout(function(){
+  addRecipeView.toggleWindow();
+   },MODAL_CLOSE * 1000)
+}
 
 }
 const init= function(){
